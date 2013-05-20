@@ -307,6 +307,9 @@ class Compiler
 
             $name = $get_middle_string($sep, $get_next(key($separators)));
 
+            static $_ns_counter = 0;
+            $ns = $_ns_counter++;
+
             $v = "\$__{$ns}";
             switch ($sep[0]) {
                 // translate the javascript's obj.attr into php's obj->attr or obj['attr']
