@@ -832,11 +832,21 @@ class Compiler
                     $conditional .= '(%s) {';
                     if ($matches[1] == 'unless') {
                         $conditional = sprintf($conditional, 'if', '!(%s)');
+                        $this->buffer($this->createCode($conditional, $code));
                     } else {
-                        $conditional = sprintf($conditional, $matches[1], '%s');
-                    }
 
-                    $this->buffer($this->createCode($conditional, $code));
+                        //новый код для isset
+                        if(!preg_match('/[&|^\(\)]/',$code)){
+                            $conditional = sprintf($conditional, $matches[1], 'isset(%s) && %s');
+                            $this->buffer($this->createCode($conditional, $code, $code));
+                        }else{
+                            $conditional = sprintf($conditional, $matches[1], '%s');
+                            $this->buffer($this->createCode($conditional, $code, $code));
+
+                        }
+
+
+                    }
                 } else {
                     $conditional .= ' {';
                     $conditional = sprintf($conditional, $matches[1]);
