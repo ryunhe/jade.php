@@ -315,7 +315,11 @@ class Compiler {
                 // funcall
                 case '(':
                     $arguments  = $handle_code_inbetween();
-                    $call       = $varname . '->' . $name . '(' . implode(', ', $arguments) . ')';
+                    if ($varname[0] == '$')
+                        $call       = $varname . '->' . $name . '(' . implode(', ', $arguments) . ')';
+                    else
+                        $call       = $varname . '(' . implode(', ', $arguments) . ')';
+
                     $cs = current($separators);
                     while($cs && ($cs[0] == '->' || $cs[0] == '(' || $cs[0] == ')')) {
                         $call .= $cs[0] . $get_middle_string(current($separators), $get_next(key($separators)));
