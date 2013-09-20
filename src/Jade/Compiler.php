@@ -184,7 +184,8 @@ class Compiler {
         $separators = $_separators;
 
         if (count($separators) == 0) {
-            if (strchr('0123456789-+("\'$', $input[0]) === FALSE) {
+            if (strchr('0123456789-+("\'$', $input[0]) === FALSE &&
+                !in_array(strtolower(trim($input)), array('true', 'false'))) {
                 $input = '$' . $input;
             }
 
