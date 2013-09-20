@@ -286,15 +286,25 @@ class Compiler {
             // $sep[0] - the separator string due to PREG_SPLIT_OFFSET_CAPTURE flag
             // $sep[1] - the offset due to PREG_SPLIT_OFFSET_CAPTURE
             $sep= current($separators);
+            $name = $get_middle_string($sep, $get_next(key($separators)));
+            //Adds support for using . as method caller by looking ahead for a (
+            next($separators);
+            $next = current($separators);
+            if ($next[0] == '(')
+                $sep = $next;
+            else {
+                prev($separators);
+                $sep = current($separators);
+            }
 
             if ($sep[0] == null) break; // end of string
 
-            $name = $get_middle_string($sep, $get_next(key($separators)));
 
             $v = "\$__{$ns}";
             switch ($sep[0]) {
                 // translate the javascript's obj.attr into php's obj->attr or obj['attr']
                 case '.':
+
                     // TODO: Move isset(->)?->:[]; to a function
                     $accessor= "{$v}=isset({$varname}->{$name}) ? {$varname}->{$name} : ((!is_object({$varname}))?({$varname}['{$name}']):'')";
                     array_push($result, $accessor);
@@ -305,13 +315,14 @@ class Compiler {
                 // funcall
                 case '(':
                     $arguments  = $handle_code_inbetween();
-                    $call       = $varname . '(' . implode(', ', $arguments) . ')';
+                    $call       = $varname . '->' . $name . '(' . implode(', ', $arguments) . ')';
                     $cs = current($separators);
                     while($cs && ($cs[0] == '->' || $cs[0] == '(' || $cs[0] == ')')) {
                         $call .= $cs[0] . $get_middle_string(current($separators), $get_next(key($separators)));
                         $cs = next($separators);
                     }
                     $varname    = $v;
+
                     array_push($result, "{$v}={$call}");
 
                     break;
