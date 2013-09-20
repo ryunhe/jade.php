@@ -18,7 +18,7 @@ class Parser {
     protected $filename;
     protected $extending;
     protected $blocks = array();
-    protected $mixins = array();
+    protected static $mixins = array();
     protected $contexts = array();
     protected $includeDirs = array();
 
@@ -94,8 +94,8 @@ class Parser {
             $ast = $parser->parse();
             $this->context();
 
-            foreach ($this->mixins as $name => $v) {
-                $ast->unshift($this->mixins[$name]);
+            foreach (self::$mixins as $name => $v) {
+                $ast->unshift(self::$mixins[$name]);
             }
             return $ast;
         }
@@ -344,7 +344,6 @@ class Parser {
 
         $parser = new Parser($str, $path);
         $parser->blocks = $this->blocks;
-        $parser->mixins = $this->mixins;
 
         $this->context($parser);
         $ast = $parser->parse();
@@ -391,7 +390,7 @@ class Parser {
         // definition
         if ('indent' == $this->peek()->type) {
             $mixin = new Nodes\Mixin($name, $arguments, $this->block(), false);
-            $this->mixins[$name] = $mixin;
+            self::$mixins[$name] = $mixin;
             return $mixin;
             // call
         }else{
