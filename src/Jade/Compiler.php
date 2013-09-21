@@ -42,9 +42,16 @@ class Compiler {
         return implode('', $this->buffer);
     }
 
-    public function visit(Nodes\Node $node) {
+    /**
+     * @param Nodes\Node[]|Nodes\Node $node
+     * @return array
+     */
+    public function visit($node) {
         // TODO: set debugging info
-        $this->visitNode($node);
+        if (!is_array($node))
+            $node = array($node);
+        foreach ($node as $n)
+            $this->visitNode($n);
         return $this->buffer;
     }
 

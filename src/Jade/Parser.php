@@ -90,7 +90,6 @@ class Parser {
 
         if ($parser = $this->extending) {
             $this->context($parser);
-            //$parser->blocks = $this->blocks;
             $ast = $parser->parse();
             $this->context();
 
@@ -312,7 +311,7 @@ class Parser {
             $this->blocks[$name] = $block;
         }
 
-        return $this->blocks[$name];
+        return $this->blocks;
     }
 
     protected function parseInclude() {
