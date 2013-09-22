@@ -162,6 +162,8 @@ class Compiler {
     }
 
     public function handleCode($input, $ns='') {
+        if (!$input)
+            return array();
         // needs to be public because of the closure $handle_recursion
 
         $result = array();
@@ -174,9 +176,15 @@ class Compiler {
             throw new \Exception('Expecting a string of javascript, empty string received.');
         }
 
-        if($input[0] == '"' && $input[strlen($input) - 1] == '"') {
+        if(($input[0] == '"' && $input[strlen($input) - 1] == '"') ||
+            $input[0] == '\'' && $input[strlen($input) - 1] == '\'') {
             return array($input);
         }
+        $inputs = array_map('trim', explode('+', $input));
+        $input = array_shift($inputs);
+        $after = array();
+        foreach ($inputs as $inputAfter)
+            $after[]=implode(' . ', $this->handleCode($inputAfter));
 
         preg_match_all(
             '/(?<![<>=!])=(?!>)|[\[\]{}(),;.]|(?!:):|->/', // punctuation
@@ -327,6 +335,10 @@ class Compiler {
                         $call       = $varname . '->' . $name . '(' . implode(', ', $arguments) . ')';
                     else
                         $call       = $varname . '(' . implode(', ', $arguments) . ')';
+
+                    if ($after) {
+                        $call .=' . ' . implode(' . ', array_map(function ($arr){ return implode(' . ', $arr);}, $after));
+                    }
 
                     $cs = current($separators);
                     while($cs && ($cs[0] == '->' || $cs[0] == '(' || $cs[0] == ')')) {
