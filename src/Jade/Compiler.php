@@ -192,6 +192,29 @@ class Compiler {
             $separators,
             PREG_SET_ORDER | PREG_OFFSET_CAPTURE
         );
+        //TODO: improve regex etc to handle function params better
+        $restructure = function($separators) {
+            $temp = array();
+            $count = 0;
+            foreach ($separators as $sep) {
+                if ($sep[0][0] == '(') {
+                    $count++;
+                    if ($count==1)
+                        $temp[] = $sep;
+                }
+                if ($sep[0][0] != '=' && $count!=2 && $sep[0][0] != '(' && $sep[0][0] != ')')
+                    $temp[] = $sep;
+
+                if ($sep[0][0] == ')') {
+                    $count--;
+                    if ($count==0)
+                        $temp[] = $sep;
+                }
+            }
+            return $temp;
+        };
+        $separators = $restructure($separators);
+
         $_separators = array();
         foreach ($separators as $sep) {
             array_push($_separators, $sep[0]);
