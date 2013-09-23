@@ -180,6 +180,20 @@ class Compiler {
             $input[0] == '\'' && $input[strlen($input) - 1] == '\'') {
             return array($input);
         }
+        //TODO: Better handling of &&, add support for ||, and, or
+        if (strpos($input,'&&') !== false) {
+            $inputs = array_map('trim', explode('&&', $input));
+            $combine = array();
+            foreach ($inputs as $inputAfter) {
+                $res = $this->handleCode($inputAfter);
+                array_pop($res);
+                $res = str_replace('$__=', '', array_pop($res));
+                $combine[]=$res;
+            }
+            array_push($result, implode(' && ',  $combine));
+            return $result;
+        }
+
         //TODO: find better way to find (...+...) content
         $firstBracket = strpos($input, '(');
         $secondBracket = strpos($input, ')',strlen($input)-1);
