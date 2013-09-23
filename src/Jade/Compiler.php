@@ -180,12 +180,20 @@ class Compiler {
             $input[0] == '\'' && $input[strlen($input) - 1] == '\'') {
             return array($input);
         }
-        $inputs = array_map('trim', explode('+', $input));
-        $input = array_shift($inputs);
-        $after = array();
-        foreach ($inputs as $inputAfter)
-            $after[]=implode(' . ', $this->handleCode($inputAfter));
+        //TODO: find better way to find (...+...) content
+        $firstBracket = strpos($input, '(');
+        $secondBracket = strpos($input, ')',strlen($input)-1);
+        $firstCombine = strpos($input, '+');
 
+        if ($firstBracket > $firstCombine || $firstCombine>$secondBracket) {
+            $inputs = array_map('trim', explode('+', $input));
+
+            $input = array_shift($inputs);
+
+            $after = array();
+            foreach ($inputs as $inputAfter)
+                $after[]=implode(' . ', $this->handleCode($inputAfter));
+        }
         preg_match_all(
             '/(?<![<>=!])=(?!>)|[\[\]{}(),;.]|(?!:):|->/', // punctuation
             $input,
