@@ -31,6 +31,9 @@ class Compiler {
     protected $selfClosing  = array('meta', 'img', 'link', 'input', 'source', 'area', 'base', 'col', 'br', 'hr');
     //protected $phpKeywords  = array('true','false','null','switch','case','default','endswitch','if','elseif','else','endif','while','endwhile','do','for','endfor','foreach','endforeach','as','unless');
     protected $phpOpenBlock = array('switch','elseif','if','else','while','do','foreach','for','unless');
+    private $noBegin;
+    private $noEnd;
+
     //protected $phpCloseBlock= array('endswitch','endif','endwhile','endfor','endforeach');
 
     public function __construct($prettyprint=false) {
@@ -518,9 +521,16 @@ class Compiler {
     }
 
     protected function createPhpBlock($code, $statements = null) {
-
         if ($statements == null) {
-            return '<?php ' . $code . ' ?>';
+            $string = ($this->noBegin ? '' : '<?php ') . $code . ($this->noEnd ? '': ' ?>');
+            if ($this->noEnd) {
+                $this->noEnd = false;
+                $this->noBegin = true;
+            }elseif ($this->noBegin) {
+                $this->noEnd = false;
+                $this->noBegin = false;
+            }
+            return $string;
         }
 
         $code_format= array_pop($statements);
@@ -528,7 +538,16 @@ class Compiler {
 
         if (count($statements) == 0) {
             $php_string = call_user_func_array('sprintf', $code_format);
-            return '<?php ' . $php_string . ' ?>';
+            $string = ($this->noBegin ? '' : '<?php ') . $php_string. ($this->noEnd ? '': ' ?>');
+            if ($this->noEnd) {
+                $this->noEnd = false;
+                $this->noBegin = true;
+            }elseif ($this->noBegin) {
+                $this->noEnd = false;
+                $this->noBegin = false;
+            }
+
+            return $string;
         }
 
         $stmt_string= '';
@@ -538,10 +557,20 @@ class Compiler {
 
         $stmt_string .= $this->newline() . $this->indent();
         $stmt_string .= call_user_func_array('sprintf', $code_format);
-
-        $php_str = '<?php ';
+        $php_str = '';
+        if (!$this->noBegin)
+            $php_str = '<?php ';
         $php_str .= $stmt_string;
-        $php_str .= $this->newline() . $this->indent() . ' ?>';
+        $php_str .= $this->newline() . $this->indent();
+        if (!$this->noEnd)
+            $php_str .= ' ?>';
+        if ($this->noEnd) {
+            $this->noEnd = false;
+            $this->noBegin = true;
+        }elseif ($this->noBegin) {
+            $this->noEnd = false;
+            $this->noBegin = false;
+        }
 
         return $php_str;
     }
@@ -556,7 +585,7 @@ class Compiler {
             return $this->createPhpBlock($code, $statements);
         }
 
-        return $this->createPhpBlock($code);
+        return $this->createPhpBlock($code, null);
     }
 
     protected function interpolate($text) {
@@ -595,9 +624,8 @@ class Compiler {
         $within = $this->withinCase;
         $this->withinCase = true;
 
-        // TODO: fix the case hack
-        // php expects that the first case statement will be inside the same php block as the switch
-        $code_str = 'switch (%s) { '.$this->newline().$this->indent().'case "__phphackhere__": break;';
+        $code_str = 'switch (%s) { ';
+        $this->noEnd = true;
         $code = $this->createCode($code_str,$node->expr);
         $this->buffer($code);
 
@@ -612,17 +640,19 @@ class Compiler {
 
     protected function visitWhen(Nodes\When $node) {
         if ('default' == $node->expr) {
+            $this->noBegin = true;
             $code = $this->createCode('default:');
             $this->buffer($code);
         }else{
+            $this->noBegin = true;
             $code = $this->createCode('case %s:',$node->expr);
             $this->buffer($code);
         }
 
         $this->visit($node->block);
-
+        $this->noEnd = true;
         $code = $this->createCode('break;');
-        $this->buffer( $code . $this->newline());
+        $this->buffer( $code);
     }
 
     protected function visitLiteral(Nodes\Literal $node) {
