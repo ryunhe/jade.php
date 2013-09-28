@@ -97,7 +97,7 @@ class Compiler {
 
     protected function indent() {
         if ($this->prettyprint) {
-            return str_repeat('  ', $this->indents);
+            return str_repeat('    ', $this->indents);
         }
         return '';
     }
@@ -143,7 +143,7 @@ class Compiler {
         // test agains a array of constants
         if (!$attr && !$ok && (0 === strpos($str,'array(') || 0 === strpos($str,'['))) {
 
-            // This pattern matches against array constants: useful for "data-" attributes (see test attrs-data.jade)
+            // This pattern matches against array constants: useful for "data-" attributes (see test attrs.data.jade)
             //
             // simpler regex                - explanation
             //
