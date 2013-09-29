@@ -10,7 +10,7 @@ vendor
 *.exe
 *.o
 *.so
-.lock
+*.lock
 
 # Packages #
 ############
