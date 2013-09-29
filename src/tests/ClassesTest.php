@@ -6,7 +6,7 @@ namespace Jade\Tests;
  * Class ClassesTest
  * @package Jade\Tests
  */
-class CLassesTest extends TestBase {
+class ClassesTest extends TestBase {
     public function testClasses() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
