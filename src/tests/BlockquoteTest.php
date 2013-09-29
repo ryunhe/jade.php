@@ -2,8 +2,6 @@
 
 namespace Jade\Tests;
 
-include_once 'TestBase.php';
-
 class BlockquoteTest extends TestBase {
     public function testBlockquote() {
         $verification = $this->verification(__FUNCTION__);

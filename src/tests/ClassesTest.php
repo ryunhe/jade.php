@@ -2,14 +2,18 @@
 
 namespace Jade\Tests;
 
-class BlockTest extends TestBase {
-    public function testBlock_Expansion() {
+/**
+ * Class ClassesTest
+ * @package Jade\Tests
+ */
+class CLassesTest extends TestBase {
+    public function testClasses() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
 
-    public function testBlock_Expansion_Shorthands() {
+    public function testClasses_Empty() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);

@@ -2,7 +2,6 @@
 
 namespace Jade\Tests;
 
-include_once 'TestBase.php';
 /**
  * Class CaseTest
  * THe switch handling results in ugly html due to PHP rendering

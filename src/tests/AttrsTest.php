@@ -1,9 +1,7 @@
 <?php
 
 namespace Jade\Tests;
-
-include_once 'TestBase.php';
-
+include 'TestBase.php';
 class AttrsTest extends TestBase {
 
     public function testAttrs() {

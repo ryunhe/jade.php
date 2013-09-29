@@ -2,8 +2,6 @@
 
 namespace Jade\Tests;
 
-include_once 'TestBase.php';
-
 class BlanksTest extends TestBase {
     public function testBlanks() {
         $verification = $this->verification(__FUNCTION__);
