@@ -40,7 +40,10 @@ abstract class TestBase extends PHPUnit_Framework_TestCase {
      */
     protected function render($test_method) {
         $content = $this->jade->render($this->jadeFile($test_method));
-        file_put_contents(dirname(__FILE__) . '/results/' . $test_method .".php", $content);
+        $results_dir = dirname(__FILE__) . '/results/';
+        if (!file_exists($results_dir))
+            mkdir($results_dir);
+        file_put_contents($results_dir. $test_method .".php", $content);
         ob_start();
         eval("?>" . $content);
         $rendered = ob_get_contents();

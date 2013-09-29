@@ -14,5 +14,11 @@ class CaseTest extends TestBase {
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
+
+    public function testCase_Blocks() {
+        $verification = $this->verification(__FUNCTION__);
+        $rendered = $this->render(__FUNCTION__);
+        $this->assertEquals($verification, $rendered);
+    }
 }
  
