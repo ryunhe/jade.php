@@ -179,8 +179,9 @@ class Compiler {
             throw new \Exception('Expecting a string of javascript, empty string received.');
         }
 
-        if(($input[0] == '"' && $input[strlen($input) - 1] == '"') ||
-            $input[0] == '\'' && $input[strlen($input) - 1] == '\'') {
+        if((($input[0] == '"' && $input[strlen($input) - 1] == '"') ||
+            $input[0] == '\'' && $input[strlen($input) - 1] == '\'') &&
+            (substr_count($input,"'") == 2 || substr_count($input,"\"") == 2)) {
             return array($input);
         }
         //TODO: Better handling of &&, add support for ||, and, or
@@ -189,6 +190,7 @@ class Compiler {
             $combine = array();
             foreach ($inputs as $inputAfter) {
                 $res = $this->handleCode($inputAfter);
+
                 array_pop($res);
                 $res = str_replace('$__=', '', array_pop($res));
                 $combine[]=$res;
@@ -201,16 +203,16 @@ class Compiler {
         $firstBracket = strpos($input, '(');
         $secondBracket = strpos($input, ')',strlen($input)-1);
         $firstCombine = strpos($input, '+');
-
+        $after = array();
         if ($firstBracket > $firstCombine || $firstCombine>$secondBracket) {
             $inputs = array_map('trim', explode('+', $input));
 
             $input = array_shift($inputs);
 
-            $after = array();
             foreach ($inputs as $inputAfter)
                 $after[]=implode(' . ', $this->handleCode($inputAfter));
         }
+
         preg_match_all(
             '/(?<![<>=!])=(?!>)|[\[\]{}(),;.]|(?!:):|->/', // punctuation
             $input,
@@ -238,6 +240,7 @@ class Compiler {
             }
             return $temp;
         };
+
         $separators = $restructure($separators);
 
         $_separators = array();
@@ -245,6 +248,15 @@ class Compiler {
             array_push($_separators, $sep[0]);
         }
         $separators = $_separators;
+        //TODO: ugly handling of var['test'] = 'test' cases
+        $secondBracket = strpos($input, ']');
+        $firstCombine = strpos($input, '=');
+        if ( $secondBracket!==false && $firstCombine !== false &&
+             $secondBracket < $firstCombine) {
+            $after[]=$this->handleCode(trim(substr($input, strpos($input,'=')+1)));
+            $input = substr($input, 0, strpos($input,'='));
+            $input = trim($input);
+        }
 
         if (count($separators) == 0) {
             if (strchr('0123456789-+("\'$', $input[0]) === FALSE &&
@@ -286,7 +298,6 @@ class Compiler {
                 return '';
 
             $_code  = $host->handleCode($str, $ns);
-
             if (count($_code) > 1) {
                 $result = array_merge($result, array_slice($_code, 0, -1));
                 return array_pop($_code);
@@ -408,11 +419,14 @@ class Compiler {
 
                     break;
 
-                /*case '[':
+                case '[':
                     $arguments = $handle_code_inbetween();
                     $varname = $varname . '[' . implode($arguments) . ']';
+                    if ($after) {
+                        $varname .= ' = ' . implode(' . ', array_map(function ($arr){ return implode(' . ', $arr);}, $after));
+                    }
 
-                    break;*/
+                    break;
 
                 case '=':
                     if (preg_match('/^[[:space:]]*$/', $name)) {
@@ -433,7 +447,8 @@ class Compiler {
 
             next($separators);
         }
-        array_push($result, $varname);
+        if ($varname)
+            array_push($result, $varname);
         return $result;
     }
 
