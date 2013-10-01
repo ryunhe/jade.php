@@ -364,7 +364,7 @@ class Compiler {
             if ($sep[0] == null) break; // end of string
 
 
-            $v = "\$__{$ns}";
+            $v = "\${$ns}";
             switch ($sep[0]) {
                 // translate the javascript's obj.attr into php's obj->attr or obj['attr']
                 case '.':
@@ -393,9 +393,9 @@ class Compiler {
                         $call .= $cs[0] . $get_middle_string(current($separators), $get_next(key($separators)));
                         $cs = next($separators);
                     }
-                    $varname    = $v;
+                    $varname    = '';
 
-                    array_push($result, "{$v}={$call}");
+                    array_push($result, "{$v}{$call}");
 
                     break;
 
