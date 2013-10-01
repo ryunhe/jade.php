@@ -266,7 +266,7 @@ class Parser {
         }
 
         if (is_null($path))
-            throw new JadeFileNotFound(sprintf('Could not locate template %s in paths %s',
+            throw new JadeFileNotFound(sprintf('Could not locate extend template %s in paths %s',
                 $file . self::$extension, implode(',' , $this->includeDirs)));
 
         $string = file_get_contents($path);
@@ -318,7 +318,7 @@ class Parser {
         $token = $this->expect('include');
         $file = trim($token->value);
 
-        if( strpos(basename($file), '.') === false ){
+        if(  pathinfo($file, PATHINFO_EXTENSION) != 'jade' ){
             $file = $file . '.jade';
         }
         $path = null;
@@ -332,7 +332,7 @@ class Parser {
         }
 
         if (is_null($path))
-            throw new JadeFileNotFound(sprintf('Could not locate template %s in paths %s',
+            throw new JadeFileNotFound(sprintf('Could not locate include template %s in paths %s',
                 $file, implode(',' , $this->includeDirs)));
 
         $str = file_get_contents($path);
