@@ -270,7 +270,7 @@ class Parser {
                 $file . self::$extension, implode(',' , $this->includeDirs)));
 
         $string = file_get_contents($path);
-        $parser = new Parser($string, $path);
+        $parser = new Parser($string, array('filepath' => $path, 'includes' => array_merge($this->includeDirs, array(dirname($path)))));
         // need to be a reference, or be seted after the parse loop
         $parser->blocks = &$this->blocks;
         $parser->contexts = $this->contexts;
@@ -318,13 +318,14 @@ class Parser {
         $token = $this->expect('include');
         $file = trim($token->value);
 
-        if(  pathinfo($file, PATHINFO_EXTENSION) != 'jade' ){
+        if(  pathinfo($file, PATHINFO_EXTENSION) != 'jade' && pathinfo($file, PATHINFO_EXTENSION) != 'html'){
             $file = $file . '.jade';
         }
         $path = null;
 
         foreach ($this->includeDirs as $incDir) {
             $path =  rtrim($incDir, "\\/")  . DIRECTORY_SEPARATOR . $file;
+
             if (file_exists($path))
                 break;
             else

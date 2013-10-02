@@ -2,47 +2,35 @@
 namespace Jade\Tests;
 
 /**
- * Class Include test
+ * Class Mixin test
  * @package Jade\Tests
  */
-class IncludeTest extends TestBase {
-    public function testInclude_Extends_Of_Common_Template() {
+class MixinTest extends TestBase {
+    public function testMixin_Attrs() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
     
-    public function testInclude_Only_Text_Body() {
+    public function testMixin_Block_Tag_Behaviour() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
     
-    public function testInclude_Only_Text() {
+    public function testMixin_Blocks() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
     
-    public function testInclude_Script() {
+    public function testMixin_Hoist() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
     
-    public function testInclude_With_Text_Head() {
-        $verification = $this->verification(__FUNCTION__);
-        $rendered = $this->render(__FUNCTION__);
-        $this->assertEquals($verification, $rendered);
-    }
-    
-    public function testInclude_With_Text() {
-        $verification = $this->verification(__FUNCTION__);
-        $rendered = $this->render(__FUNCTION__);
-        $this->assertEquals($verification, $rendered);
-    }
-    
-    public function testInclude_Yield_Nested() {
+    public function testMixin_Merge() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);

@@ -2,11 +2,11 @@
 namespace Jade\Tests;
 
 /**
- * Class Foreach test
+ * Class Html5 test
  * @package Jade\Tests
  */
-class ForeachTest extends TestBase {
-    public function testForeach() {
+class Html5Test extends TestBase {
+    public function testHtml5() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);

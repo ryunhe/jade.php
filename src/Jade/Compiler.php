@@ -381,9 +381,9 @@ class Compiler {
                 case '.':
 
                     // TODO: Move isset(->)?->:[]; to a function
-                    $accessor= "{$v}=isset({$varname}->{$name}) ? {$varname}->{$name} : ((!is_object({$varname}))?({$varname}['{$name}']):'')";
+                    $accessor= "{$v}_var=isset({$varname}->{$name}) ? {$varname}->{$name} : ((!is_object({$varname}))?({$varname}['{$name}']):'')";
                     array_push($result, $accessor);
-                    $varname = $v;
+                    $varname = "{$v}_var";
 
                     break;
 
@@ -771,13 +771,13 @@ class Compiler {
 
             //TODO: assign nulls to all varargs for remove php warnings
             array_unshift($arguments, 'attributes');
-            $code = $this->createCode("function {$name} (%s) {", implode(',',$arguments));
+            $code = $this->createCode("if (!function_exists('{$name}')) { \n function {$name} (%s) {", implode(',',$arguments));
 
             $this->buffer($code);
             $this->indents++;
             $this->visit($block);
             $this->indents--;
-            $this->buffer($this->createCode('}'));
+            $this->buffer($this->createCode("}\n }"));
         }
     }
 

@@ -2,11 +2,11 @@
 namespace Jade\Tests;
 
 /**
- * Class Foreach test
+ * Class Escape test
  * @package Jade\Tests
  */
-class ForeachTest extends TestBase {
-    public function testForeach() {
+class EscapeTest extends TestBase {
+    public function testEscape_Chars() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);

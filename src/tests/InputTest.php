@@ -2,23 +2,17 @@
 namespace Jade\Tests;
 
 /**
- * Class Doctype test
+ * Class Input test
  * @package Jade\Tests
  */
-class DoctypeTest extends TestBase {
-    public function testDoctype_Custom() {
+class InputTest extends TestBase {
+    public function testInput_Checked() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
     
-    public function testDoctype_Default() {
-        $verification = $this->verification(__FUNCTION__);
-        $rendered = $this->render(__FUNCTION__);
-        $this->assertEquals($verification, $rendered);
-    }
-    
-    public function testDoctype_Keyword() {
+    public function testInput_Selected() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);

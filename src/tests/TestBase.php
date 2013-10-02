@@ -36,15 +36,17 @@ abstract class TestBase extends PHPUnit_Framework_TestCase {
 
     /**
      * @param string $test_method
+     * @param array $scope
      * @return string
      */
-    protected function render($test_method) {
-        $content = $this->jade->render($this->jadeFile($test_method), array(), array('includes' => dirname(__FILE__). DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR));
+    protected function render($test_method, $scope = array()) {
+        $content = $this->jade->render($this->jadeFile($test_method), $scope, array('includes' => dirname(__FILE__). DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR));
         $results_dir = dirname(__FILE__) . '/results/';
         if (!file_exists($results_dir))
             mkdir($results_dir);
         file_put_contents($results_dir. $test_method .".php", $content);
         ob_start();
+        clearstatcache();
         eval("?>" . $content);
         $rendered = ob_get_contents();
         ob_end_clean();
