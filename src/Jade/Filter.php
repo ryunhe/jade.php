@@ -11,7 +11,7 @@ class Filter {
             }
             $data = $new_str;
         }
-        return $data;
+        return self::parse_data($data);
     }
 
     public static function cdata($data) {
@@ -23,6 +23,8 @@ class Filter {
             }
             $data = $new_data;
         }
+        $data = self::parse_data($data);
+
         return "<!CDATA[\n" . $data . "\n]]>";
     }
 
@@ -47,5 +49,24 @@ class Filter {
             $data = $new_data;
         }
         return '<?php ' . $data . ' ?>';
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    private static function parse_data($data) {
+        preg_match_all('/#{(.+)}/imU', $data, $result, PREG_SET_ORDER);
+        foreach ($result as $match) {
+            list($full, $cmd) = $match;
+            $cmd = str_replace('.', '->', $cmd);
+            preg_match_all('/\[(.+)\]/imU', $cmd, $result2, PREG_SET_ORDER);
+            foreach ($result2 as $match2) {
+                list($full2, $cmd2) = $match2;
+                $cmd = str_replace($cmd2, '\'' . trim($cmd2, "'") . '\'', $cmd);
+            }
+            $data = str_replace($full, '<?php echo htmlspecialchars($' . $cmd . ') ?>', $data);
+        }
+        return $data;
     }
 }
