@@ -88,6 +88,9 @@ class Parser {
             }
         }
 
+        /**
+         * @var Parser $parser
+         */
         if ($parser = $this->extending) {
             $this->context($parser);
             $ast = $parser->parse();
@@ -342,7 +345,7 @@ class Parser {
             return new Nodes\Literal($str);
         }
 
-        $parser = new Parser($str, $path);
+        $parser = new Parser($str, array('filename'=>$path,'includes' => $this->includeDirs));
         $parser->blocks = $this->blocks;
 
         $this->context($parser);

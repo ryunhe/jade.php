@@ -2,17 +2,17 @@
 namespace Jade\Tests;
 
 /**
- * Class Case test
+ * Class Text test
  * @package Jade\Tests
  */
-class CaseTest extends TestBase {
-    public function testCase_Blocks() {
+class TextTest extends TestBase {
+    public function testText_Block() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
     
-    public function testCase() {
+    public function testText() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);

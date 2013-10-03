@@ -1,9 +1,8 @@
 <?php
-
 namespace Jade\Tests;
 
 /**
- * Class CommentsTest
+ * Class Comments test
  * @package Jade\Tests
  */
 class CommentsTest extends TestBase {
@@ -12,11 +11,12 @@ class CommentsTest extends TestBase {
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
-
+    
     public function testComments() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
+    
 }
- 
+            

@@ -47,6 +47,7 @@ abstract class TestBase extends PHPUnit_Framework_TestCase {
         file_put_contents($results_dir. $test_method .".php", $content);
         ob_start();
         clearstatcache();
+        extract($scope);
         eval("?>" . $content);
         $rendered = ob_get_contents();
         ob_end_clean();

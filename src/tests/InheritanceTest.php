@@ -2,35 +2,48 @@
 namespace Jade\Tests;
 
 /**
- * Class Attrs test
+ * Class Inheritance test
  * @package Jade\Tests
  */
-class AttrsTest extends TestBase {
-    public function testAttrs_Data() {
+include_once('TestBase.php');
+class InheritanceTest extends TestBase {
+    public function testInheritance_Alert_Dialog() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
     
-    public function testAttrs_Interpolation() {
+    public function testInheritance_Defaults() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
     
-    public function testAttrs() {
+    public function testInheritance_Extend_Include() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
     
-    public function testAttrs_Js() {
+    public function testInheritance_Extend() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
     }
     
-    public function testAttrs_Unescaped() {
+    public function testInheritance_Extend_Mixins() {
+        $verification = $this->verification(__FUNCTION__);
+        $rendered = $this->render(__FUNCTION__);
+        $this->assertEquals($verification, $rendered);
+    }
+    
+    public function testInheritance_Extend_Whitespace() {
+        $verification = $this->verification(__FUNCTION__);
+        $rendered = $this->render(__FUNCTION__);
+        $this->assertEquals($verification, $rendered);
+    }
+    
+    public function testInheritance() {
         $verification = $this->verification(__FUNCTION__);
         $rendered = $this->render(__FUNCTION__);
         $this->assertEquals($verification, $rendered);
