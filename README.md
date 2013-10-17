@@ -1,5 +1,6 @@
 # Jade.php
 Will be adding all my changes to https://github.com/cyonite/phade/ ended up converting a lot of stuff from original jade project. Nothing will really remain.
+You can see test results on http://phade.io/
 
 Jade.php adds inline PHP scripting support to the [Jade](http://jade-lang.com) template compiler.
 
