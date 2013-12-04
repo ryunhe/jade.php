@@ -314,7 +314,7 @@ class Parser {
             $this->blocks[$name] = $block;
         }
 
-        return $this->blocks;
+        return $this->blocks[$name];
     }
 
     protected function parseInclude() {
