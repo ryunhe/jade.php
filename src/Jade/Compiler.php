@@ -855,7 +855,7 @@ class Compiler
                 }
 
             } else {
-                $this->buffer($this->createCode('%s', $code));
+                $this->buffer($this->createCode($code));
             }
         }
 
