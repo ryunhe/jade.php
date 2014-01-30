@@ -326,7 +326,7 @@ class Compiler
                     $arguments  = $handle_code_inbetween();
                     $call       = $varname . '(' . implode(', ', $arguments) . ')';
                     $cs = current($separators);
-                    if ($call[0] !== '$') $call = '$' . $call;
+//                    if ($call[0] !== '$') $call = '$' . $call;
                     while ($cs && ($cs[0] == '->' || $cs[0] == '(' || $cs[0] == ')')) {
                         $call .= $cs[0] . $get_middle_string(current($separators), $get_next(key($separators)));
                         $cs = next($separators);
