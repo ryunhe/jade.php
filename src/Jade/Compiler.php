@@ -836,7 +836,7 @@ class Compiler
                     } else {
 
                         //новый код для isset
-                        if(!preg_match('/[&|^\(\)]/',$code)){
+                        if(!preg_match('/[$&|^\(\)]/',$code)){
                             $conditional = sprintf($conditional, $matches[1], 'isset(%s) && %s');
                             $this->buffer($this->createCode($conditional, $code, $code));
                         }else{
@@ -932,8 +932,8 @@ class Compiler
 
                     if ($key == 'class') {
                         $value = $this->createCode('echo (is_array(%1$s)) ? implode(" ", %1$s) : %1$s', $value);
-                    } elseif (strpos($key, 'data-') !== false) {
-                        $value = $this->createCode('echo json_encode(%s)', $value);
+//                    } elseif (strpos($key, 'data-') !== false) {
+//                        $value = $this->createCode('echo json_encode(%s)', $value);
                     } else {
                         $value = $this->createCode('echo %s', $value);
                     }
