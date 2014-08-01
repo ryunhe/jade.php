@@ -670,24 +670,30 @@ class Compiler
             $this->buffer($code);
 
         } else {
-            if ($arguments === null || empty($arguments)) {
-                $arguments = array();
-            } else
-            if (!is_array($arguments)) {
-                $arguments = array($arguments);
-            }
+	        if (!isset(self::$visitedMixins[$name])) {
+		        self::$visitedMixins[$name] = 1;
 
-            //TODO: assign nulls to all varargs for remove php warnings
-            array_unshift($arguments, 'attributes');
-            $code = $this->createCode("function {$name} (%s) {", implode(',',$arguments));
+		        if ($arguments === null || empty($arguments)) {
+			        $arguments = array();
+		        } else
+			        if (!is_array($arguments)) {
+				        $arguments = array($arguments);
+			        }
 
-            $this->buffer($code);
-            $this->indents++;
-            $this->visit($block);
-            $this->indents--;
-            $this->buffer($this->createCode('}'));
+		        //TODO: assign nulls to all varargs for remove php warnings
+		        array_unshift($arguments, 'attributes');
+		        $code = $this->createCode("function {$name} (%s) {", implode(',',$arguments));
+
+		        $this->buffer($code);
+		        $this->indents++;
+		        $this->visit($block);
+		        $this->indents--;
+		        $this->buffer($this->createCode('}'));
+	        }
         }
     }
+
+	protected static $visitedMixins = [];
 
     protected function visitTag(Nodes\Tag $tag)
     {
