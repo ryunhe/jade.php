@@ -315,7 +315,7 @@ class Compiler
                 // translate the javascript's obj.attr into php's obj->attr or obj['attr']
                 case '.':
                     // TODO: Move isset(->)?->:[]; to a function
-                    $accessor= "{$v}=property_exists({$varname}, \"{$name}\") ? {$varname}->{$name} : {$varname}['{$name}']";
+                    $accessor= "{$v}=isset({$varname}->{$name}) ? {$varname}->{$name} : {$varname}['{$name}']";
                     array_push($result, $accessor);
                     $varname = $v;
 
