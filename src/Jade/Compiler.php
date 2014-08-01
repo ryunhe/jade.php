@@ -315,7 +315,7 @@ class Compiler
                 // translate the javascript's obj.attr into php's obj->attr or obj['attr']
                 case '.':
                     // TODO: Move isset(->)?->:[]; to a function
-                    $accessor= "{$v}=isset({$varname}->{$name}) ? {$varname}->{$name} : {$varname}['{$name}']";
+                    $accessor= "{$v}=property_exists({$varname}, \"{$name}\") ? {$varname}->{$name} : {$varname}['{$name}']";
                     array_push($result, $accessor);
                     $varname = $v;
 
@@ -345,11 +345,10 @@ class Compiler
 
                     break;
 
-                /*case '[':
-                    $arguments = $handle_code_inbetween();
-                    $varname = $varname . '[' . implode($arguments) . ']';
-
-                    break;*/
+//                case '[':
+//                    $arguments = $handle_code_inbetween();
+//                    $varname = $varname . '[' . implode($arguments) . ']';
+//                    break;
 
                 case '=':
                     if (preg_match('/^[[:space:]]*$/', $name)) {
