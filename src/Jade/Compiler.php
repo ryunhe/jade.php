@@ -955,6 +955,8 @@ class Compiler
                 } else {
                     $items[] = "{$key}='{$key}'";
                 }
+            } elseif (preg_match("/\<?php (.*)?>/", $value)) {
+                $items[] = "{$key}={$value}";
             } elseif ($value !== 'false' && $value !== 'null' && $value !== 'undefined') {
                 $items[] = "{$key}='{$value}'";
             }
